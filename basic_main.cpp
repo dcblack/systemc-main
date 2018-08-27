@@ -1,5 +1,7 @@
 //FILE basic_main.cpp (systemc)
 // $Info: Entry point for executing simulation for 'basic'.$
+// Copyright 2018 Doulos Inc. All rights reserved.
+// Licensed under Apache 2.0 - see accompanying LICENSE FILE.
 //-----------------------------------------------------------------------------
 #include "basic_top.h"
 #include "wallclock.h"
@@ -101,5 +103,7 @@ namespace {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// Copyright 2018 Doulos Inc. All rights reserved.
+// Licensed under Apache 2.0 - see accompanying LICENSE FILE.
 // -*- C++ -*- vim:sw=2:tw=0:fdm=marker:fmr=<<<,>>>
 //END main.cpp $Id$ >>>}

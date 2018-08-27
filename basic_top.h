@@ -2,12 +2,14 @@
 #define BASIC_TOP_H
 // -*- C++ -*- vim600:syntax=cpp:sw=2:tw=78
 // COMMENT BLOCK <<////////////////////////////////////////////////////////////
-//{:<COPYRIGHT>:}
+// Copyright 2018 Doulos Inc. All rights reserved.
+// Licensed under Apache 2.0 - see accompanying LICENSE FILE.
 //
 // DESCRIPTION
 //! \brief Top level connectivity for basic.
 //
-// {:LONG_DESCRIPTION:}
+// This is part of a more extensive example for coding SystemC
+// main.cpp and the top-level. See also README.md.
 //
 ////////////////////////////////////////////////////////////////////////////>>/
 #include <systemc>
@@ -32,4 +34,6 @@ private:
 };//endMODULE Basic_top
 #endif
 ///////////////////////////////////////////////////////////////////////////////
+// Copyright 2018 Doulos Inc. All rights reserved.
+// Licensed under Apache 2.0 - see accompanying LICENSE FILE.
 //END $Id$

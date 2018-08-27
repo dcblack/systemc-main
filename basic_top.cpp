@@ -1,12 +1,14 @@
 //BEGIN basic_top.cpp (systemc)
 // -*- C++ -*- vim600:syntax=cpp:sw=2:tw=78:fmr=<<<,>>>
 // COMMENT BLOCK <<<///////////////////////////////////////////////////////////
-//{:<COPYRIGHT>:}
+// Copyright 2018 Doulos Inc. All rights reserved.
+// Licensed under Apache 2.0 - see accompanying LICENSE FILE.
 // 
 // DESCRIPTION
 //! \brief Top level connectivity for 'basic'.
 //
-// {:LONG_DESCRIPTION:}
+// This is part of a more extensive example for coding SystemC
+// main.cpp and the top-level. See also README.md.
 //
 ////////////////////////////////////////////////////////////////////////////>>>
 #include "basic_top.h"
@@ -16,7 +18,7 @@ using namespace sc_core;
 using namespace std;
 
 namespace {
-  const char* const MSGID="/Doulos Inc/{:PRODUCT:}/basic_top";
+  const char* const MSGID="/Doulos Inc/SystemC-Example/basic_top";
   const char* const RCSID="/$Id$";
   void parse_command_line( void );
 }
@@ -165,5 +167,6 @@ namespace {
 }//endnamespace
 
 ///////////////////////////////////////////////////////////////////////////////
-//{:<?COPYRIGHT>:}
+// Copyright 2018 Doulos Inc. All rights reserved.
+// Licensed under Apache 2.0 - see accompanying LICENSE FILE.
 //END $Id$
