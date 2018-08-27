@@ -19,7 +19,13 @@ struct Basic_top
   Basic_top(sc_core::sc_module_name instance_name);
   // Destructor
   virtual ~Basic_top(void);
-  // Processes - NONE
+  // Overrides
+  void before_end_of_elaboration(void);
+  void end_of_elaboration(void);
+  void start_of_simulation(void);
+  void end_of_simulation(void);
+  // Processes
+  void Basic_thread(void);
 private:
   // Helper methods - NONE
   // Attributes - NONE
