@@ -31,12 +31,12 @@ do {\
 } while (0)
 
 #define SC_ALWAYS SC_NONE
-#define REPORT_INFO(verbosity_level,message_stream) \
+#define INFO(verbosity_level,message_stream) \
 do {\
-  if(sc_core::get_verbosity_level() >= sc_core::SC_##verbosity_level)) {\
+  if(sc_core::sc_report_handler::get_verbosity_level() >= sc_core::SC_##verbosity_level) {\
     mout.str("");\
     mout << std::dec << message_stream << std::ends;\
-    SC_REPORT_##message_type(MSGID,mout.str().c_str());\
+    SC_REPORT_INFO_VERB(MSGID,mout.str().c_str(),SC_##verbosity_level);\
   }\
 } while (0)
 
