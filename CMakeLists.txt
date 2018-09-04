@@ -6,10 +6,10 @@
 #   Define SYSTEMC_HOME to point to install directory of SystemC (not source)
 
 cmake_minimum_required(VERSION 3.11)
-
+set(TARGET_EXECUTABLE $<TARGET_FILE_NAME:basic.x>)
 project(basic CXX)
 
-include(CMakeSystemC.txt)
+include(systemc.cmake)
 
 add_compile_definitions(SC_INCLUDE_FX SC_INCLUDE_DYNAMIC_PROCESSES)
 

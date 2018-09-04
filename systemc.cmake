@@ -12,7 +12,7 @@ link_libraries(SystemC::systemc)
 # Things that affect all targets
 set(shared_env LD_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib DYLD_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib)
 add_custom_target(run
-   time env ${shared_env} ./$<TARGET_FILE_NAME:basic.x> $(ARGS) 2>&1 | tee {:NAME:}.log
-   COMMENT "Running program"
+   time env ${shared_env} ./${TARGET_EXECUTABLE} $(ARGS) 2>&1 | tee {:NAME:}.log
+   COMMENT "Running program ${TARGET_EXECUTABLE}"
    USES_TERMINAL
    )
