@@ -35,7 +35,7 @@ do {\
 do {\
   if(sc_core::sc_report_handler::get_verbosity_level() >= sc_core::SC_##verbosity_level) {\
     mout.str("");\
-    mout << std::dec << message_stream << std::ends;\
+    mout << std::dec << message_stream << " at " << sc_core::sc_time_stamp() << std::ends;\
     SC_REPORT_INFO_VERB(MSGID,mout.str().c_str(),SC_##verbosity_level);\
   }\
 } while (0)
