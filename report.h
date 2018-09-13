@@ -1,7 +1,8 @@
-// Improve reporting providing two macros, REPORT and INFO, that allow
-// for streaming syntax like cout.
+//@brief: Improve reporting providing two macros, REPORT and INFO, that allow
+// for streaming syntax like cout. Also add macros to aid initial development
+// with NOT_YET_IMPLEMENTED and TODO.
 //
-// Syntax:
+//@Syntax:
 //   REPORT(message_type, message_stream);
 //   INFO(verbosity_level, message_stream);
 //   TODO(message_stream);
@@ -17,7 +18,7 @@
 //     const char* MSGID{"/Company/Group/Project/Module"};
 //   }
 
-// Examples:
+//@Example:
 //   #include "report.h"
 //   namespace {
 //     const char* MSGID{"/Doulos/Example/Report"};
