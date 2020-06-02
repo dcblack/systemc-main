@@ -11,8 +11,8 @@
 // main.cpp and the top-level. See also README.md.
 //
 ////////////////////////////////////////////////////////////////////////////>>>
-#include "basic_top.hpp
-#include "report.hpp
+#include "basic_top.hpp"
+#include "report.hpp"
 #include <cstdlib>
 using namespace sc_core;
 using namespace std;

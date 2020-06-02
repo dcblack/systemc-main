@@ -3,12 +3,12 @@
 // Copyright 2018 Doulos Inc. All rights reserved.
 // Licensed under Apache 2.0 - see accompanying LICENSE FILE.
 //-----------------------------------------------------------------------------
-#include "basic_top.hpp
-#include "wallclock.hpp
+#include "basic_top.hpp"
+#include "wallclock.hpp"
 #if __cplusplus >= 201103L
 #  include <memory>
 #endif
-#include "report.hpp
+#include "report.hpp"
 std::ostringstream mout;
 
 namespace {

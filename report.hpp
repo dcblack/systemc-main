@@ -13,7 +13,7 @@
 //
 // Assumes you define in every source file:
 //
-//   #include "report.hpp
+//   #include "report.hpp"
 //   namespace {
 //     const char* MSGID{"/Company/Group/Project/Module"};
 //   }
