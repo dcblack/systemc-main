@@ -12,13 +12,13 @@
 //
 // Assumes you define in every source file:
 //
-//   #include "report.h"
+//   #include "report.hpp
 //   namespace {
 //     const char* MSGID{"/Company/Group/Project/Module"};
 //   }
 
 // Examples:
-//   #include "report.h"
+//   #include "report.hpp
 //   namespace {
 //     const char* MSGID{"/Doulos/Example/Report"};
 //   }
@@ -28,8 +28,8 @@
 //   NOT_YET_IMPLEMENTED();
 //
 
-#ifndef REPORT_H
-#define REPORT_H
+#ifndef REPORT_HPP
+#define REPORT_HPP
 #include <systemc>
 #include <sstream>
 #include <iomanip>

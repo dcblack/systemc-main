@@ -1,5 +1,5 @@
-#ifndef BASIC_TOP_H
-#define BASIC_TOP_H
+#ifndef BASIC_TOP_HPP
+#define BASIC_TOP_HPP
 // -*- C++ -*- vim600:syntax=cpp:sw=2:tw=78
 // COMMENT BLOCK <<////////////////////////////////////////////////////////////
 // Copyright 2018 Doulos Inc. All rights reserved.

@@ -1,6 +1,6 @@
 // The following was obtained from http://stackoverflow.com/questions/17432502/how-can-i-measure-cpu-time-and-wall-clock-time-on-both-linux-windows
 
-#include "wallclock.h"
+#include "wallclock.hpp
 #include <time.h>
 #include <sys/utsname.h>
 #ifdef _MSC_VER
