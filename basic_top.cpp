@@ -71,7 +71,9 @@ void Basic_top::end_of_simulation(void)
 ////////////////////////////////////////////////////////////////////////////>>/
 void Basic_top::Basic_thread( void )
 {
+  REPORT(INFO,"Executing " << __func__ << " with a simple 42 second delay.");
   wait(42,SC_SEC);
+  REPORT(INFO,"Shutting down simulation");
   sc_stop();
 }
 
@@ -163,7 +165,7 @@ namespace {
       }
       REPORT(INFO,"Done testing " << __func__);
     }
-  }
+  }//end parse_command_line()
 }//endnamespace
 
 ///////////////////////////////////////////////////////////////////////////////
