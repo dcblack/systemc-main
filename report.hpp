@@ -32,24 +32,29 @@
 #ifndef REPORT_HPP
 #define REPORT_HPP
 #include <systemc>
+#include <string>
 #include <sstream>
 #include <iomanip>
 extern std::ostringstream mout;
-#define REPORT(message_type,message_stream) \
-do {\
-  mout.str("");\
-  mout << std::dec << message_stream << std::ends;\
-  SC_REPORT_##message_type(MSGID,mout.str().c_str());\
+#define REPORT(message_type,message_stream)         \
+do {                                                \
+  mout << std::dec << message_stream << std::ends;  \
+  std::string str = mout.str(); mout.str("");       \
+  SC_REPORT_##message_type(MSGID,str.c_str());      \
 } while (0)
 
 #define SC_ALWAYS SC_NONE
-#define INFO(verbosity_level,message_stream) \
-do {\
-  if(sc_core::sc_report_handler::get_verbosity_level() >= sc_core::SC_##verbosity_level) {\
-    mout.str("");\
-    mout << std::dec << message_stream << " at " << sc_core::sc_time_stamp() << std::ends;\
-    SC_REPORT_INFO_VERB(MSGID,mout.str().c_str(),sc_core::SC_##verbosity_level);\
-  }\
+#define INFO(verbosity_level,message_stream)                                \
+do { using namespace sc_core;                                               \
+  if(sc_report_handler::get_verbosity_level() >= SC_##verbosity_level) {    \
+    mout << std::dec << message_stream; auto now = sc_time_stamp();         \
+    if( now > SC_ZERO_TIME or sc_get_status() >= SC_START_OF_SIMULATION ) { \
+      mout << std::dec << message_stream << " at " << sc_time_stamp();      \
+    }                                                                       \
+    mout << std::ends;                                                      \
+    std::string str = mout.str(); mout.str("");                             \
+    SC_REPORT_INFO_VERB(MSGID,str.c_str(),SC_##verbosity_level);            \
+  }                                                                         \
 } while (0)
 
 #define TODO(message_stream) REPORT( WARNING, "TODO: " << message_stream )
