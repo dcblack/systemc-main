@@ -3,7 +3,7 @@ About
 
 This directory contains a basic empty SystemC design with a single top-level
 module and minimal main implementation that provides an execution summary. One
-extra file, `report.h` is provided to simplify message reporting. See `report.h`
+extra file, `report.hpp` is provided to simplify message reporting. See `report.hpp`
 comments for more information.
 
 Instructions
