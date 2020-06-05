@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.11)
 set(TARGET_EXECUTABLE $<TARGET_FILE_NAME:basic.x>)
 project(basic CXX)
 
-include(/apps/cmake/SystemC.cmake)
+include(SystemC.cmake)
 
 add_compile_definitions(SC_INCLUDE_FX SC_INCLUDE_DYNAMIC_PROCESSES)
 if (MSVC)
