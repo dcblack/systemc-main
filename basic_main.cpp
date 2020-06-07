@@ -93,15 +93,15 @@ namespace {
     if ( finished_cpuTime < 0.0 ) {
       finished_cpuTime = get_cpu_time();
     }
-    auto errors = sc_core::sc_report_handler::get_count(SC_ERROR)
-                + sc_core::sc_report_handler::get_count(SC_FATAL);
-    REPORT(INFO, "\n" << string(80,'#') << "\nSummary for " << sc_core::sc_argv()[0] << ":\n  "
+    auto errors = sc_report_handler::get_count(SC_ERROR)
+                + sc_report_handler::get_count(SC_FATAL);
+    REPORT(INFO, "\n" << string(80,'#') << "\nSummary for " << sc_argv()[0] << ":\n  "
       << "CPU elaboration time " << setprecision(4) << (starting_cpuTime - elaboration_cpuTime) << " sec\n  "
       << "CPU simulation  time " << setprecision(4) << (finished_cpuTime - starting_cpuTime) << " sec\n  "
-      << setw(2) << sc_core::sc_report_handler::get_count(SC_INFO)    << " informational messages" << "\n  "
-      << setw(2) << sc_core::sc_report_handler::get_count(SC_WARNING) << " warnings" << "\n  "
-      << setw(2) << sc_core::sc_report_handler::get_count(SC_ERROR)   << " errors"   << "\n  "
-      << setw(2) << sc_core::sc_report_handler::get_count(SC_FATAL)   << " fatals"   << "\n\n"
+      << setw(2) << sc_report_handler::get_count(SC_INFO)    << " informational messages" << "\n  "
+      << setw(2) << sc_report_handler::get_count(SC_WARNING) << " warnings" << "\n  "
+      << setw(2) << sc_report_handler::get_count(SC_ERROR)   << " errors"   << "\n  "
+      << setw(2) << sc_report_handler::get_count(SC_FATAL)   << " fatals"   << "\n\n"
       << kind << " " << (errors?"FAILED":"PASSED")
     );
     return (errors?1:0);
