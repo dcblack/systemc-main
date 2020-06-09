@@ -23,11 +23,16 @@ using namespace std;
 // syntax for sc_main.  Moreover, if we desire to use argc and argv
 // elsewhere, we simply use sc_core::sc_argc() and sc_core::sc_argv(),
 // which have been captured prior to calling here.
+#if __cplusplus < 201703L
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 int sc_main(int argc, char *argv[]) //< main entry-point to SystemC
 {
 #pragma GCC diagnostic pop
+#else
+int sc_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) //< main entry-point to SystemC
+{
+#endif
 
   // Pointer to top-level module
   #if __cplusplus < 201103L
