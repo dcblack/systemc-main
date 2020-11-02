@@ -13,6 +13,8 @@
 //  Windows
 #ifdef _WIN32
 #include <Windows.h>
+
+//------------------------------------------------------------------------------
 double get_wall_time(){
   LARGE_INTEGER time,freq;
   if (!QueryPerformanceFrequency(&freq)){
@@ -25,6 +27,8 @@ double get_wall_time(){
   }
   return (double)time.QuadPart / freq.QuadPart;
 }
+
+//------------------------------------------------------------------------------
 double get_cpu_time(){
   FILETIME a,b,c,d;
   if (GetProcessTimes(GetCurrentProcess(),&a,&b,&c,&d) != 0){
@@ -42,6 +46,8 @@ double get_cpu_time(){
 //  Posix/Linux
 #else
 #include <sys/time.h>
+
+//------------------------------------------------------------------------------
 double get_wall_time(){
   struct timeval time;
   if (gettimeofday(&time,NULL)){
@@ -50,6 +56,8 @@ double get_wall_time(){
   }
   return (double)time.tv_sec + (double)time.tv_usec * .000001;
 }
+
+//------------------------------------------------------------------------------
 double get_cpu_time(){
   return (double)clock() / CLOCKS_PER_SEC;
 }
@@ -70,7 +78,7 @@ int main(){
   double cpu0  = get_cpu_time();
 
   //  Perform some computation.
-  double sum = 0;
+  volatile double sum = 0;
 #pragma omp parallel for reduction(+ : sum)
   for (long long i = 1; i < 1000000000; i++){
       sum += log((double)i);
@@ -89,4 +97,7 @@ int main(){
 
 }
 #endif
-//EOF
+
+///////////////////////////////////////////////////////////////////////////////
+// Copyright 2010 by Doulos. All rights reserved.
+//END wallclock.cpp
