@@ -23,7 +23,7 @@ using namespace std;
 // Private stuff (similar to using static variables in C)
 namespace {
   const char* const MSGID="/Doulos Inc/SystemC-Example/basic_top";
-  const char* const RCSID="/$Id$";
+  [[maybe_unused]]const char* const RCSID="/$Id$";
   void parse_command_line( void );
   const char* message_type( decltype(SC_INFO) type );
   auto simplify = [](unsigned char c){ return (c == '-')?'_':std::tolower(c); };
