@@ -43,40 +43,40 @@ Basic_top::Basic_top(sc_module_name instance_name)
   SC_HAS_PROCESS(Basic_top);
   SC_THREAD(Basic_thread);
   inject_errors();
-  REPORT(INFO,"Constructed " << name());
+  REPORT( INFO, "Constructed " << name() );
 }//endconstructor
 
 ////////////////////////////////////////////////////////////////////////////>>/
 // Destructor <<
 Basic_top::~Basic_top(void) {
-  REPORT(INFO,"Destroyed " << name());
+  REPORT( INFO, "Destroyed " << name());
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
 void Basic_top::before_end_of_elaboration(void)
 {
-  REPORT(INFO,"Before end of elaboration");
+  REPORT( INFO, BOOST_CURRENT_FUNCTION );
   inject_errors();
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
 void Basic_top::end_of_elaboration(void)
 {
-  REPORT(INFO,"End of elaboration");
+  REPORT( INFO, BOOST_CURRENT_FUNCTION );
   inject_errors();
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
 void Basic_top::start_of_simulation( void )
 {
-  REPORT(INFO,"Start of simulation");
+  REPORT( INFO, BOOST_CURRENT_FUNCTION );
   inject_errors();
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
 void Basic_top::end_of_simulation(void)
 {
-  REPORT(INFO,"End of simulation");
+  REPORT( INFO, BOOST_CURRENT_FUNCTION );
   inject_errors();
 }
 

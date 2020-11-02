@@ -10,6 +10,10 @@ set(TARGET_EXECUTABLE $<TARGET_FILE_NAME:basic.x>)
 project(basic CXX)
 
 include(SystemC.cmake)
+find_package( Boost )
+if( Boost_FOUND )
+  include_directories(${Boost_INCLUDE_DIRS})
+endif()
 
 add_compile_definitions(SC_INCLUDE_FX SC_INCLUDE_DYNAMIC_PROCESSES)
 if (MSVC)

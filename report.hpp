@@ -73,6 +73,7 @@ See `ABOUT_REPORT.md` for more information.
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <boost/current_function.hpp>
 struct Report {
 #if __cplusplus >= 201703L
   inline // Obliviates the need for report.cpp
