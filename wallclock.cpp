@@ -4,10 +4,26 @@
 #include <time.h>
 #include <sys/utsname.h>
 #ifdef _MSC_VER
-#include <Windows.h>
+#  include <Windows.h>
 #else
-#include <sys/time.h>
-#include <ctime>
+#  include <sys/time.h>
+#  include <ctime>
+#endif
+#if __cplusplus >= 201103
+#  include <chrono>
+namespace {
+  using hres_clock = std::chrono::high_resolution_clock;
+  using ns_t = std::chrono::duration<double,std::nano>;
+  struct Wall_time {
+    Wall_time() : m_timestart ( hres_clock::now() ) { }
+    std::chrono::nanoseconds elapsed() const { return hres_clock::now() - m_timestart; }
+    double seconds() const { return elapsed()/ns_t(1.0)*1.0e-9; }
+  private:
+    const hres_clock::time_point m_timestart;
+  };
+  Wall_time t0;
+}
+double get_wall_time(){ return t0.seconds(); }
 #endif
 
 //  Windows
@@ -15,6 +31,7 @@
 #include <Windows.h>
 
 //------------------------------------------------------------------------------
+#if __cplusplus < 201103
 double get_wall_time(){
   LARGE_INTEGER time,freq;
   if (!QueryPerformanceFrequency(&freq)){
@@ -27,6 +44,7 @@ double get_wall_time(){
   }
   return (double)time.QuadPart / freq.QuadPart;
 }
+#endif
 
 //------------------------------------------------------------------------------
 double get_cpu_time(){
@@ -48,6 +66,7 @@ double get_cpu_time(){
 #include <sys/time.h>
 
 //------------------------------------------------------------------------------
+#if __cplusplus < 201103
 double get_wall_time(){
   struct timeval time;
   if (gettimeofday(&time,NULL)){
@@ -56,6 +75,7 @@ double get_wall_time(){
   }
   return (double)time.tv_sec + (double)time.tv_usec * .000001;
 }
+#endif
 
 //------------------------------------------------------------------------------
 double get_cpu_time(){
@@ -65,7 +85,7 @@ double get_cpu_time(){
 
 ////////////////////////////////////////////////////////////////////////////////
 // Self-test
-#ifdef TEST_WALLCLOCK
+#ifdef WALLCLOCK_SELFTEST
 #include <iostream>
 #include <cmath>
 using namespace std;
@@ -96,7 +116,7 @@ int main(){
   cout << "Sum = " << sum << endl;
 
 }
-#endif
+#endif/*defined WALLCLOCK_SELFTEST*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright 2010 by Doulos. All rights reserved.
