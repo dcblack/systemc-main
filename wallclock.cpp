@@ -119,5 +119,5 @@ int main(){
 #endif/*defined WALLCLOCK_SELFTEST*/
 
 ///////////////////////////////////////////////////////////////////////////////
-// Copyright 2010 by Doulos. All rights reserved.
+// Copyright 2020 by Doulos. All rights reserved.
 //END wallclock.cpp
