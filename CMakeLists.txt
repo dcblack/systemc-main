@@ -24,12 +24,13 @@ else()
     add_compile_options(-g -Wall -Wextra -pedantic -Werror)
 endif()
 
-add_executable(basic.x
-  basic_main.cpp
-  basic_top.cpp
+add_executable( basic.x
+  main.cpp
+  top.cpp
   wallclock.cpp
+  sstream.cpp
   report.cpp
-)
+  sstream.cpp )
 #target_compile_features(basic.x PUBLIC cxx_std_11)
 #target_include_directories(basic.x includes)
 #target_link_libraries(basic.x ${CMAKE_SOURCE_DIR}/lib{:YOUR_STATIC_LIB:}.a)

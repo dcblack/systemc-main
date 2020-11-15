@@ -60,25 +60,29 @@ DEBUG( "Sending packet " << packet );
 
 ### Step 4 (for DEBUG macro)
 Make sure you have set the verbosity level to SC_DEBUG. You might consider
-using the Commandline::has_opt("-debug") to conditionallly set this.
+using the Commandline::has_opt("-debug") to conditionally set this.
 At run-time, add command-line arguments to specify the instances you want to
 debug:
 % run.x -debug=observer -debug=splitter # debugs only for specified elements
-% run.x -debugall # turns on all DEBUG messages
+% run.x -debug_all # turns on all DEBUG messages
 See `ABOUT_REPORT.md` for more information.
 ********************************************************************************
 */
 
 #include <systemc>
 #include <string>
-#include <sstream>
+#include "sstream.hpp"
 #include <iomanip>
-#include <boost/current_function.hpp>
-struct Report {
-#if __cplusplus >= 201703L
-  inline // Obliviates the need for report.cpp
+#if __has_include("boost/current_function.hpp")
+#include "boost/current_function.hpp"
+#else
+#include "boost/include/current_function.hpp"
 #endif
-  static std::ostringstream mout;
+struct Report {
+  static vector_output_stream& mout() {
+    static vector_output_stream message_out{1024};
+    return message_out;
+  }
 };
 #define STREAM_HEX std::hex << std::showbase
 #define STREAM_DEC std::dec << std::noshowbase << std::setfill(' ')
@@ -100,11 +104,11 @@ struct Report {
   #define DELETE_THIS_LINE(lno,message)
 #else
 // For type: WARNING, ERROR, FATAL (use INFO() for INFO level messages)
-#define REPORT(type,stream)                      \
-do {                                             \
-  Report::mout << STREAM_DEC << stream << std::ends;     \
-  auto str = Report::mout.str(); Report::mout.str(""); \
-  SC_REPORT_##type( MSGID, str.c_str() );        \
+#define REPORT(type,stream)                                \
+do {                                                       \
+  Report::mout() << STREAM_DEC << stream ;                 \
+  auto str = Report::mout().str(); Report::mout().clear(); \
+  SC_REPORT_##type( MSGID, str.c_str() );                  \
 } while (0)
 
 // Use the following to (A) add more information in the event of failure, and
@@ -122,26 +126,25 @@ do {                                             \
 #define DEVID ((std::string("(")+name()+")").c_str())
 #define NOINFO(level,stream)
 // For level: NONE, LOW, MEDIUM, HIGH, DEBUG
-#define INFO(level,stream)                                                          \
-do {                                                                                \
+#define INFO(level,stream)                                                   \
+do {                                                                         \
   if( sc_core::sc_report_handler::get_verbosity_level()                      \
         >= (sc_core::SC_##level) ) {                                         \
-    Report::mout << STREAM_DEC << stream;                                    \
+    Report::mout() << STREAM_DEC << stream;                                  \
     auto now = sc_core::sc_time_stamp();                                     \
     if( now > sc_core::SC_ZERO_TIME                                          \
         or sc_core::sc_get_status() >= sc_core::SC_START_OF_SIMULATION ) {   \
-      Report::mout << STREAM_DEC << " at " << now;                           \
+      Report::mout() << STREAM_DEC << " at " << now;                         \
     }                                                                        \
-    Report::mout << std::ends;                                               \
     if( (sc_core::SC_##level) > sc_core::SC_DEBUG ) {                        \
       std::string id{"DEBUG("};                                              \
       id+=__FILE__ ; id+=":"; id+=std::to_string(__LINE__)+")";              \
-      size_t p0=id.find("/"),p1=id.find_last_of("/");                        \
+      size_t p0=id.find('/'),p1=id.find_last_of('/');                        \
       if(p1!=std::string::npos) id.erase(p0,p1-p0+1);                        \
-      auto str = Report::mout.str(); Report::mout.str("");                   \
+      auto str = Report::mout().str(); Report::mout().clear();               \
       SC_REPORT_INFO_VERB( id.c_str(), str.c_str(), (sc_core::SC_##level) ); \
     } else {                                                                 \
-      auto str = Report::mout.str(); Report::mout.str("");                   \
+      auto str = Report::mout().str(); Report::mout().clear();               \
       SC_REPORT_INFO_VERB( MSGID, str.c_str(), (sc_core::SC_##level) );      \
     }                                                                        \
   }                                                                          \
@@ -152,20 +155,19 @@ do {                                                                            
 #include "commandline.hpp"
 #define DEBUG(stream) do {                                                   \
   if( sc_core::sc_report_handler::get_verbosity_level() >= sc_core::SC_DEBUG \
-  and ( Commandline::has_opt("-debugall")                                    \
+  and ( Commandline::has_opt("-debug_all")                                   \
      or Commandline::has_opt("-debug="s + basename() ) ) ) {                 \
      INFO(DEBUG,stream);                                                     \
   }                                                                          \
 } while(0)
 #endif
-#define MESSAGE(stream) do { Report::mout << stream; } while(0)
+#define MESSAGE(stream) do { Report::mout() << stream; } while(0)
 #define MEND(level) do {                                                            \
   if( sc_core::sc_report_handler::get_verbosity_level() >= (sc_core::SC_##level) ) {\
-    Report::mout << std::ends;                                                              \
-    std::string str = Report::mout.str(); Report::mout.str("");                                     \
+    std::string str = Report::mout().str(); Report::mout().clear();                 \
     SC_REPORT_INFO_VERB( MSGID, str.c_str(), (sc_core::SC_##level));                \
   }                                                                                 \
-  Report::mout.str( "" );                                                                   \
+  Report::mout().str( "" );                                                         \
 } while (0)
 
 #define RULER(c) MESSAGE( std::string( 80, c ) << "\n" )

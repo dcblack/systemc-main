@@ -5,12 +5,12 @@ define setup
   break parse_command_line 
   break inject_summary 
   break inject_errors 
-  break Basic_top::Basic_top
-  break Basic_top::before_end_of_elaboration
-  break Basic_top::end_of_elaboration
-  break Basic_top::start_of_simulation
-  break Basic_top::end_of_simulation
-  break Basic_top::Basic_thread
+  break Top::Top
+  break Top::before_end_of_elaboration
+  break Top::end_of_elaboration
+  break Top::start_of_simulation
+  break Top::end_of_simulation
+  break Top::Basic_thread
 end
 
 define test

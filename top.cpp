@@ -1,4 +1,4 @@
-//BEGIN basic_top.cpp (systemc)
+//BEGIN top.cpp (systemc)
 // -*- C++ -*- vim600:syntax=cpp:sw=2:tw=78:fmr=<<<,>>>
 // COMMENT BLOCK <<<///////////////////////////////////////////////////////////
 // Copyright 2018 Doulos Inc. All rights reserved.
@@ -11,7 +11,7 @@
 // main.cpp and the top-level. See also README.md.
 //
 ////////////////////////////////////////////////////////////////////////////>>>
-#include "basic_top.hpp"
+#include "top.hpp"
 #include "report.hpp"
 #include <cstdlib>
 #include <map>
@@ -22,66 +22,66 @@ using namespace std;
 
 // Private stuff (similar to using static variables in C)
 namespace {
-  const char* const MSGID="/Doulos Inc/SystemC-Example/basic_top";
+  const char* const MSGID="/Doulos Inc/SystemC-Example/top";
   [[maybe_unused]]const char* const RCSID="/$Id$";
-  void parse_command_line( void );
+  void parse_command_line();
   const char* message_type( decltype(SC_INFO) type );
   auto simplify = [](unsigned char c){ return (c == '-')?'_':std::tolower(c); };
-  void inject_summary( void );
-  void inject_errors( void );
+  void inject_summary();
+  void inject_errors();
   std::multimap<decltype(SC_RUNNING),decltype(SC_INFO)> inject_mmap;
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
 // Constructor <<
-Basic_top::Basic_top(sc_module_name instance_name)
+Top::Top(sc_module_name instance_name)
 : sc_module(instance_name)
 {
   parse_command_line();
   // Connectivity -- NONE
   // Processes
-  SC_HAS_PROCESS(Basic_top);
+  SC_HAS_PROCESS(Top);
   SC_THREAD(Basic_thread);
   inject_errors();
   REPORT( INFO, "Constructed " << name() );
-}//endconstructor
+}
 
 ////////////////////////////////////////////////////////////////////////////>>/
 // Destructor <<
-Basic_top::~Basic_top(void) {
+Top::~Top() {
   REPORT( INFO, "Destroyed " << name());
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
-void Basic_top::before_end_of_elaboration(void)
+void Top::before_end_of_elaboration()
 {
   REPORT( INFO, BOOST_CURRENT_FUNCTION );
   inject_errors();
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
-void Basic_top::end_of_elaboration(void)
+void Top::end_of_elaboration()
 {
   REPORT( INFO, BOOST_CURRENT_FUNCTION );
   inject_errors();
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
-void Basic_top::start_of_simulation( void )
+void Top::start_of_simulation()
 {
   REPORT( INFO, BOOST_CURRENT_FUNCTION );
   inject_errors();
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
-void Basic_top::end_of_simulation(void)
+void Top::end_of_simulation()
 {
   REPORT( INFO, BOOST_CURRENT_FUNCTION );
   inject_errors();
 }
 
 ////////////////////////////////////////////////////////////////////////////>>/
-void Basic_top::Basic_thread( void )
+void Top::Basic_thread()
 {
   REPORT(INFO,"Executing " << __func__ << " with a simple 42 second delay.");
   inject_errors();
@@ -94,7 +94,7 @@ void Basic_top::Basic_thread( void )
 namespace {
 
   //----------------------------------------------------------------------------
-  void parse_command_line( void )
+  void parse_command_line()
   {
     bool test_reporting( false );
     auto inject_when = SC_RUNNING;
@@ -162,9 +162,8 @@ namespace {
         std::transform( arg.begin(), arg.end(), arg.begin(), simplify );
         if ( arg == "elaboration"                      or arg == "elab" ) {
           inject_when = SC_ELABORATION;
-        } else if ( arg == "before_end_of_elaboration" or arg == "beoe" ) {
-          inject_when = SC_END_OF_ELABORATION;
-        } else if ( arg == "end_of_elaboration"        or arg == "eoe" ) {
+        } else if ( arg == "before_end_of_elaboration" or arg == "beoe"
+                 or arg == "end_of_elaboration"        or arg == "eoe" ) {
           inject_when = SC_END_OF_ELABORATION;
         } else if ( arg == "start_of_simulation"       or arg == "sos" ) {
           inject_when = SC_START_OF_SIMULATION;
@@ -172,9 +171,8 @@ namespace {
           inject_when = SC_RUNNING;
         } else if ( arg == "paused"                    or arg == "psd" ) {
           inject_when = SC_PAUSED;
-        } else if ( arg == "end_of_simulation"         or arg == "eos" ) {
-          inject_when = SC_END_OF_SIMULATION;
-        } else if ( arg == "stopped"                   or arg == "stop" ) {
+        } else if ( arg == "end_of_simulation"         or arg == "eos"
+                 or arg == "stopped"                   or arg == "stop" ) {
           inject_when = SC_END_OF_SIMULATION;
 	} else {
 	  REPORT( WARNING, "Ignoring unknown -when type: '" << arg << "'!?" );
@@ -190,19 +188,19 @@ namespace {
         if ( arg == "warning" ) {
           inject_mmap.insert(std::make_pair(inject_when,SC_WARNING));
         }
-	else if ( arg == "error" ) {
+        else if ( arg == "error" ) {
           inject_mmap.insert(std::make_pair(inject_when,SC_ERROR));
         }
-	else if ( arg == "fatal" ) {
+        else if ( arg == "fatal" ) {
           inject_mmap.insert(std::make_pair(inject_when,SC_FATAL));
         }
         else {
-	  REPORT( WARNING, "Ignoring unknown -inject type: '" << arg << "'!?" );
+          REPORT( WARNING, "Ignoring unknown -inject type: '" << arg << "'!?" );
         }
       } else {
         REPORT( WARNING, "Ignoring unknown command-line argument: '" << arg << "'!?" );
       }
-    }//endfor
+    }
 
     inject_summary();
 
@@ -214,7 +212,7 @@ namespace {
       INFO( DEBUG,   "Testing debug  verbosity message in " << __func__ );
 
     }
-  }//end parse_command_line()
+  }
 
   const char* message_type( decltype(SC_INFO) type )
   {
@@ -228,7 +226,7 @@ namespace {
   }
 
   //----------------------------------------------------------------------------
-  void inject_summary( void )
+  void inject_summary()
   {
     for( const auto& p : inject_mmap ) {
 	INFO( ALWAYS, p.first << " -> " << message_type(p.second) );
@@ -236,7 +234,7 @@ namespace {
   }
 
   //----------------------------------------------------------------------------
-  void inject_errors( void )
+  void inject_errors()
   {
       auto range = inject_mmap.equal_range( sc_get_status() );
       for( auto it=range.first; it!=range.second; ++it) {
@@ -248,9 +246,9 @@ namespace {
           REPORT( FATAL,   "Testing fatal" );
         }
       }
-  }//end inject_errors
+  }
 
-}//endnamespace
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright 2018 Doulos Inc. All rights reserved.

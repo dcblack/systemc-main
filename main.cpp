@@ -1,9 +1,9 @@
-//FILE basic_main.cpp (systemc)
+//FILE main.cpp (systemc)
 // $Info: Entry point for executing simulation for 'basic'.$
 // Copyright 2018 Doulos Inc. All rights reserved.
 // Licensed under Apache 2.0 - see accompanying LICENSE FILE.
 //-----------------------------------------------------------------------------
-#include "basic_top.hpp"
+#include "top.hpp"
 #include "wallclock.hpp"
 #if __cplusplus >= 201103L
 #  include <memory>
@@ -13,7 +13,7 @@
 namespace {
   const char* MSGID = "/Doulos Inc/SystemC-Example/main";
   double elaboration_cpuTime=-1.0, starting_cpuTime=-1.0, finished_cpuTime=-1.0;
-  int summary(void);
+  int summary(); //< Used in sc_main return to display summary provide PASS/FAIL return value
 }
 
 using namespace sc_core;
@@ -24,11 +24,22 @@ using namespace std;
 // elsewhere, we simply use sc_core::sc_argc() and sc_core::sc_argv(),
 // which have been captured prior to calling here.
 #if __cplusplus < 201703L
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+#ifdef __clang__
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
+#ifdef __GNUC__
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 int sc_main(int argc, char *argv[]) //< main entry-point to SystemC
 {
-#pragma GCC diagnostic pop
+#ifdef __clang__
+#  pragma clang diagnostic pop
+#endif
+#ifdef __GNUC__
+#  pragma GCC diagnostic pop
+#endif
 #else
 int sc_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) //< main entry-point to SystemC
 {
@@ -36,9 +47,9 @@ int sc_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) //< main e
 
   // Pointer to top-level module
   #if __cplusplus < 201103L
-  Basic_top* basic_top;
+  Top* top;
   #else
-  unique_ptr<Basic_top> basic_top;
+  std::unique_ptr<Top> top;
   #endif
 
   // Elaborate
@@ -46,9 +57,9 @@ int sc_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) //< main e
   try {
     // Construct top-level
     #if __cplusplus < 201103L
-    basic_top = new Basic_top("basic_top");
+    top = new Top("top");
     #else
-    basic_top.reset(new Basic_top("basic_top"));
+    top = std::make_unique<Top>("top");
     #endif
   } catch (sc_core::sc_exception& e) {
     REPORT(INFO,"\n" << e.what() << "\n\n*** Please fix elaboration errors and retry. ***");
@@ -56,7 +67,7 @@ int sc_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) //< main e
   } catch (...) {
     REPORT(INFO,"\n Error: *** Caught unknown exception during elaboration. ***");
     return summary();
-  }//endtry
+  }
 
   // Simulate
   sc_core::sc_time finished_simTime;
@@ -70,7 +81,7 @@ int sc_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) //< main e
     REPORT(WARNING,"\n\nCaught exception during active simulation.\n" << e.what());
   } catch (...) {
     REPORT(WARNING,"Error: Caught unknown exception during active simulation.");
-  }//endtry
+  }
   REPORT(INFO,"Exited kernel at " << finished_simTime);
 
   // Clean up
@@ -88,7 +99,7 @@ int sc_main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) //< main e
 //-----------------------------------------------------------------------------
 namespace {
   // Summarize results
-  int summary(void)
+  int summary()
   {
     string kind = "Simulation";
     if ( starting_cpuTime < 0.0 ) {
@@ -104,9 +115,9 @@ namespace {
       << "CPU elaboration time " << setprecision(4) << (starting_cpuTime - elaboration_cpuTime) << " sec\n  "
       << "CPU simulation  time " << setprecision(4) << (finished_cpuTime - starting_cpuTime) << " sec\n  "
       << setw(2) << sc_report_handler::get_count(SC_INFO)    << " informational messages" << "\n  "
-      << setw(2) << sc_report_handler::get_count(SC_WARNING) << " warnings" << "\n  "
-      << setw(2) << sc_report_handler::get_count(SC_ERROR)   << " errors"   << "\n  "
-      << setw(2) << sc_report_handler::get_count(SC_FATAL)   << " fatals"   << "\n\n"
+      << setw(2) << sc_report_handler::get_count(SC_WARNING) << " warnings"   << "\n  "
+      << setw(2) << sc_report_handler::get_count(SC_ERROR)   << " errors"     << "\n  "
+      << setw(2) << sc_report_handler::get_count(SC_FATAL)   << " fatalities" << "\n\n"
       << kind << " " << (errors?"FAILED":"PASSED")
     );
     return (errors?1:0);

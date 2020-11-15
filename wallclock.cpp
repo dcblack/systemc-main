@@ -1,13 +1,9 @@
 // The following was obtained from http://stackoverflow.com/questions/17432502/how-can-i-measure-cpu-time-and-wall-clock-time-on-both-linux-windows
 
 #include "wallclock.hpp"
-#include <time.h>
-#include <sys/utsname.h>
+#include <ctime>
 #ifdef _MSC_VER
 #  include <Windows.h>
-#else
-#  include <sys/time.h>
-#  include <ctime>
 #endif
 #if __cplusplus >= 201103
 #  include <chrono>
@@ -15,15 +11,15 @@ namespace {
   using hres_clock = std::chrono::high_resolution_clock;
   using ns_t = std::chrono::duration<double,std::nano>;
   struct Wall_time {
-    Wall_time() : m_timestart ( hres_clock::now() ) { }
-    std::chrono::nanoseconds elapsed() const { return hres_clock::now() - m_timestart; }
-    double seconds() const { return elapsed()/ns_t(1.0)*1.0e-9; }
+    Wall_time() : m_timeStart (hres_clock::now() ) { }
+    [[nodiscard]] std::chrono::nanoseconds elapsed() const { return hres_clock::now() - m_timeStart; }
+    [[nodiscard]] double seconds() const { return elapsed()/ns_t(1.0)*1.0e-9; }
+    static Wall_time& t0() { static Wall_time now; return now; }
   private:
-    const hres_clock::time_point m_timestart;
+    const hres_clock::time_point m_timeStart;
   };
-  Wall_time t0;
 }
-double get_wall_time(){ return t0.seconds(); }
+double get_wall_time(){ return Wall_time::t0().seconds(); }
 #endif
 
 //  Windows
@@ -63,7 +59,6 @@ double get_cpu_time(){
 
 //  Posix/Linux
 #else
-#include <sys/time.h>
 
 //------------------------------------------------------------------------------
 #if __cplusplus < 201103
